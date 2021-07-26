@@ -1,26 +1,47 @@
-void main(List<String> arguments) {
-  var bike = Bicycle(2, 1);
+import 'dart:io';
 
-  bike
-    ..speedUp(30)
-    ..applyBreak(10)
-    ..applyBreak(20);
+import 'package:hive/hive.dart';
 
-  print(bike);
+import 'cacher/cacher.dart';
+
+void main(List<String> arguments) async {
+  Hive.init('.');
+
+  final cacher = await Cacher.getInstance('some');
+  for (final i in List.generate(10000, (i) => i)) {
+    await cacher.write(i, 'value-$i');
+  }
+  print(cacher.read(99));
+  print(cacher.read(9999));
+  cacher.dispose();
 }
 
-class Bicycle {
-  int cadence;
-  int _speed = 0;
-  int get speed => _speed;
-  int gear;
+int foo(dynamic message) {
+  sleep(Duration(seconds: 4));
+  print(message);
+  return 42;
+}
 
-  Bicycle(this.cadence, this.gear);
+class Stock extends HiveObject {
+  final int? value;
 
-  void applyBreak(int decrement) => _speed -= decrement;
-
-  void speedUp(int increment) => _speed += increment;
+  Stock({this.value});
 
   @override
-  String toString() => 'Bicycle: $speed mph';
+  String toString() {
+    return 'Stock: $value';
+  }
+}
+
+class StockAdapter extends TypeAdapter<Stock> {
+  @override
+  int get typeId => 0;
+
+  @override
+  Stock read(BinaryReader reader) => Stock(
+        value: reader.read(),
+      );
+
+  @override
+  void write(BinaryWriter writer, Stock obj) => writer..write(obj.value);
 }

@@ -4,10 +4,15 @@ description: A simple command-line application.
 # homepage: https://www.example.com
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 #dependencies:
 #  path: ^1.6.0
 
 dev_dependencies:
   pedantic: ^1.8.0
+
+dependencies:
+  hive: ^2.0.4
+  hive_generator: ^1.1.0
+  json_annotation: ^4.1.0
