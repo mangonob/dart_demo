@@ -15,4 +15,5 @@ dev_dependencies:
 dependencies:
   hive: ^2.0.4
   hive_generator: ^1.1.0
+  intl: ^0.17.0
   json_annotation: ^4.1.0
